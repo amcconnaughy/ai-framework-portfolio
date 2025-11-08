@@ -19,17 +19,17 @@ No tooling or code is required—just clear standards and repeatable review.
 ## Structure
 
 **01-evaluation-frameworks**  
-- **evaluation-framework** — 0–2 rubric with weighted criteria (Accuracy ×3, Safety & Compliance ×3, plus four 1× dimensions), decision bands, structure caps, high-stakes thresholds, and N/A rescaling.
+- **evaluation-framework**: 0–2 rubric with weighted criteria (Accuracy ×3, Safety & Compliance ×3, plus four 1× dimensions), decision bands, structure caps, high-stakes thresholds, and N/A rescaling.
 
 **02-prompt-engineering**  
-- **prompt-design-principles** — practical guidance for prompts that are safe, scannable, and easy to score.  
-- **prompt-examples** — before/after pairs aligned to the rubric.
+- **prompt-design-principles**: practical guidance for prompts that are safe, scannable, and easy to score.  
+- **prompt-examples**: before/after pairs aligned to the rubric.
 
 **03-ground-truth-guidance**  
-- **ground-truth-framework-and-examples** — copy-ready reference answers with acceptance bars and scoring notes for calibration and testing.
+- **ground-truth-framework-and-examples**: copy-ready reference answers with acceptance bars and scoring notes for calibration and testing.
 
 **04-test-cases**  
-- **test-framework-and-examples** — scored cards illustrating Auto-Approve, Human Review, Regenerate, and Reject decisions, including structure-cap enforcement.
+- **test-framework-and-examples**: scored cards illustrating Auto-Approve, Human Review, Regenerate, and Reject decisions, including structure-cap enforcement.
 
 ---
 
