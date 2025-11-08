@@ -1,0 +1,153 @@
+Before/After Prompt Examples (scored under the framework)
+
+> Each pair shows a weak prompt, why it failed, and a corrected prompt that aligns with the rubric. Word limits prevent structure caps.
+
+### Example 1: Accuracy Improvement (Healthcare)
+
+Initial prompt (Regenerate — 9/20)
+```
+Write discharge instructions for heart failure patients.
+```
+
+Why it failed: No audience; no safety or source constraints; no structure; no validation or plain-language requirement. Output hallucinated dosages and omitted escalation.
+
+Improved prompt (target ≤ 180 words)
+```
+Role: Patient education writer
+Audience: Heart failure patients (6th–8th grade reading level)
+Context: Discharge instructions for patients leaving hospital after heart failure treatment
+Task: Create a guide with these sections:
+  - What to watch for: 3–4 warning signs in plain language
+  - Daily actions: 2–3 specific behaviors
+  - When to call your care team: clear triggers and number placeholder
+  - Validation/Acceptance: how success will be confirmed
+Guardrails:
+  - Plain language (e.g., say "swelling" not "edema")
+  - No specific medication names or dosages; defer to care team
+  - Include teach-back prompt: "Can you tell me in your own words…"
+  - Escalation: call care team at [number] or emergency services for red-flag symptoms
+Quality check:
+  - Terms at 6th–8th grade level
+  - Two concrete warning signs included
+```
+
+Acceptance bar for raters: Teach-back documented; patient can list two daily actions and two warning signs correctly.  
+Expected score: A2, S2, Outcome 2, Seq 2, Validation 2, Diff 1 → 19/20 (Auto-Approve)
+
+---
+
+### Example 2: Safety Improvement (K-12 Education)
+
+Initial prompt (Reject — Safety 0)
+```
+Create a science experiment for 5th graders about chemical reactions using household items.
+```
+
+Why it failed: No safety constraints; “household items” invites unsafe mixtures; no supervision or cleanup; age level unspecified.
+
+Improved prompt (target ≤ 200 words)
+```
+Role: Elementary science curriculum writer
+Audience: 5th grade teachers (students ages 10–11)
+Context: Safe classroom demo of a chemical reaction
+Task: Write a mini-lesson with sections:
+  - Learning objective (observable)
+  - Materials (classroom-safe only)
+  - Safety requirements (PPE, supervision, ventilation)
+  - Steps (simple → complex)
+  - Observation questions (2–3)
+  - Validation/Acceptance (what students can explain after)
+Guardrails — SAFETY CRITICAL:
+  - Use only: baking soda, vinegar, dish soap, food coloring, water
+  - Do not substitute materials beyond the approved list
+  - Never mix cleaners or chemicals beyond this list
+  - Adult supervision required throughout; include proper cleanup/disposal
+  - Define "chemical reaction" in kid-friendly terms
+Quality check:
+  - Materials limited to the approved list
+  - Adult supervision explicitly stated
+```
+
+Acceptance bar for raters: Students explain why bubbles formed and define “chemical reaction” in 1–2 sentences; teacher checks with a 3-point rubric.  
+Expected score: 20/20 (Auto-Approve)
+
+---
+
+### Example 3: Structure & Validation Improvement (Customer Education)
+
+Initial prompt (Human Review — 13/20)
+```
+Explain how to import contacts into our CRM system.
+```
+
+Why it failed: No structure; no success criteria; version ambiguity; no troubleshooting; weak accessibility.
+
+Improved prompt (target ≤ 220 words)
+```
+Role: Customer education specialist
+Audience: CRM administrators (intermediate technical skill)
+Context: Bulk contact import in CRM v3.2 using CSV
+Task: Produce a how-to with sections:
+  - Outcome: measurable success
+  - Prerequisites: 2–4 items
+  - Steps: 6–8 numbered steps
+  - Validation/Acceptance: specific checks
+  - Troubleshooting: two common issues and fixes
+  - Supports: two accessibility aids (e.g., screen-reader note; keyboard-only navigation; low-bandwidth CSV split)
+Guardrails:
+  - Version 3.2 features only (do not mix versions)
+  - Use placeholder data (no real customer info)
+  - CSV requirements: UTF-8; keep template headers; no extra columns
+  - Where to get help: Help → Import Assistant
+Quality check:
+  - Validation/Acceptance has specific success criteria
+  - Troubleshooting addresses file format and duplicate detection
+  - Two accessibility supports are present (screen reader + one additional)
+```
+
+Acceptance bar for raters: Import summary shows 0 errors; created/merged counts match preview; spot-check 3–5 records for field mapping.  
+Expected score: 20/20 (Auto-Approve)
+
+---
+
+### Example 4: Differentiation & Accessibility Improvement (Corporate Training)
+
+Initial prompt (Human Review — 14/20)
+```
+Write a training guide on our new expense reporting process.
+```
+
+Why it failed: One-size-fits-all; no mobile path; no supports; validation vague.
+
+Improved prompt (target ≤ 200 words)
+```
+Role: Corporate learning designer
+Audience: All employees (mixed digital literacy; some mobile-only)
+Context: New expense reporting process for a 500+ employee company
+Task: Provide a guide with sections:
+  - Process goal (one sentence)
+  - Prerequisites (account/app)
+  - Steps (5–6)
+  - Validation/Acceptance (observable success)
+  - Differentiation & Accessibility — include at least two (required):
+    • Mobile vs. desktop paths
+    • Manager approval shortcut for frequent submitters
+    • Visual learner note: "Screenshots available in help center"
+    • Low-bandwidth option: "Offline mode available in app settings"
+Guardrails:
+  - Plain language for non-finance staff
+  - Include where to get help (person/channel)
+  - Respect privacy (no real receipts or personal data)
+```
+
+Acceptance bar for raters: Submission status shows “Submitted” or “Approved”; confirmation email received within 5 minutes.  
+Expected score: 19/20 (Auto-Approve)
+
+---
+
+Summary of examples
+
+1. Healthcare (Accuracy): Adds plain language, defers meds to care team, measurable teach-back.  
+2. K-12 (Safety): Constrains materials, bans substitutions, adds supervision/PPE, measurable understanding.  
+3. Customer Ed (Structure/Validation): Version-specific, concrete acceptance, two accessibility supports.  
+4. Corporate Training (Differentiation): Requires multiple user paths and observable validation.
