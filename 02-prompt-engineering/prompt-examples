@@ -1,17 +1,23 @@
-Before/After Prompt Examples (scored under the framework)
+# Before/After Prompt Examples
 
-> Each pair shows a weak prompt, why it failed, and a corrected prompt that aligns with the rubric. Word limits prevent structure caps.
+**Purpose:** Demonstrate prompt improvement across contexts. Each pair shows a weak prompt, why it failed, and a corrected prompt that aligns with the rubric. Word limits prevent structure caps.
 
-### Example 1: Accuracy Improvement (Healthcare)
+**Alignment:** See `01-evaluation-frameworks/evaluation-framework` for complete scoring rubric.
 
-Initial prompt (Regenerate — 9/20)
+All examples are synthetic; no real user data.
+
+---
+
+## Example 1: Accuracy Improvement (Healthcare)
+
+**Initial prompt (Regenerate — 9/20)**
 ```
 Write discharge instructions for heart failure patients.
 ```
 
-Why it failed: No audience; no safety or source constraints; no structure; no validation or plain-language requirement. Output hallucinated dosages and omitted escalation.
+**Why it failed:** No audience; no safety or source constraints; no structure; no validation or plain-language requirement. Output hallucinated dosages and omitted escalation.
 
-Improved prompt (target ≤ 180 words)
+**Improved prompt (target ≤ 180 words)**
 ```
 Role: Patient education writer
 Audience: Heart failure patients (6th–8th grade reading level)
@@ -31,21 +37,22 @@ Quality check:
   - Two concrete warning signs included
 ```
 
-Acceptance bar for raters: Teach-back documented; patient can list two daily actions and two warning signs correctly.  
-Expected score: A2, S2, Outcome 2, Seq 2, Validation 2, Diff 1 → 19/20 (Auto-Approve)
+**Acceptance bar for raters:** Teach-back documented; patient can list two daily actions and two warning signs correctly.
+
+**Expected score:** A2, S2, Outcome 2, Seq 2, Validation 2, Diff 1 → 19/20 (Auto-Approve)
 
 ---
 
-### Example 2: Safety Improvement (K-12 Education)
+## Example 2: Safety Improvement (K-12 Education)
 
-Initial prompt (Reject — Safety 0)
+**Initial prompt (Reject — Safety 0)**
 ```
 Create a science experiment for 5th graders about chemical reactions using household items.
 ```
 
-Why it failed: No safety constraints; “household items” invites unsafe mixtures; no supervision or cleanup; age level unspecified.
+**Why it failed:** No safety constraints; "household items" invites unsafe mixtures; no supervision or cleanup; age level unspecified.
 
-Improved prompt (target ≤ 200 words)
+**Improved prompt (target ≤ 200 words)**
 ```
 Role: Elementary science curriculum writer
 Audience: 5th grade teachers (students ages 10–11)
@@ -68,21 +75,22 @@ Quality check:
   - Adult supervision explicitly stated
 ```
 
-Acceptance bar for raters: Students explain why bubbles formed and define “chemical reaction” in 1–2 sentences; teacher checks with a 3-point rubric.  
-Expected score: 20/20 (Auto-Approve)
+**Acceptance bar for raters:** Students explain why bubbles formed and define "chemical reaction" in 1–2 sentences; teacher checks with a 3-point rubric.
+
+**Expected score:** 20/20 (Auto-Approve)
 
 ---
 
-### Example 3: Structure & Validation Improvement (Customer Education)
+## Example 3: Structure & Validation Improvement (Customer Education)
 
-Initial prompt (Human Review — 13/20)
+**Initial prompt (Human Review — 13/20)**
 ```
 Explain how to import contacts into our CRM system.
 ```
 
-Why it failed: No structure; no success criteria; version ambiguity; no troubleshooting; weak accessibility.
+**Why it failed:** No structure; no success criteria; version ambiguity; no troubleshooting; weak accessibility.
 
-Improved prompt (target ≤ 220 words)
+**Improved prompt (target ≤ 220 words)**
 ```
 Role: Customer education specialist
 Audience: CRM administrators (intermediate technical skill)
@@ -105,21 +113,22 @@ Quality check:
   - Two accessibility supports are present (screen reader + one additional)
 ```
 
-Acceptance bar for raters: Import summary shows 0 errors; created/merged counts match preview; spot-check 3–5 records for field mapping.  
-Expected score: 20/20 (Auto-Approve)
+**Acceptance bar for raters:** Import summary shows 0 errors; created/merged counts match preview; spot-check 3–5 records for field mapping.
+
+**Expected score:** 20/20 (Auto-Approve)
 
 ---
 
-### Example 4: Differentiation & Accessibility Improvement (Corporate Training)
+## Example 4: Differentiation & Accessibility Improvement (Corporate Training)
 
-Initial prompt (Human Review — 14/20)
+**Initial prompt (Human Review — 14/20)**
 ```
 Write a training guide on our new expense reporting process.
 ```
 
-Why it failed: One-size-fits-all; no mobile path; no supports; validation vague.
+**Why it failed:** One-size-fits-all; no mobile path; no supports; validation vague.
 
-Improved prompt (target ≤ 200 words)
+**Improved prompt (target ≤ 200 words)**
 ```
 Role: Corporate learning designer
 Audience: All employees (mixed digital literacy; some mobile-only)
@@ -140,14 +149,6 @@ Guardrails:
   - Respect privacy (no real receipts or personal data)
 ```
 
-Acceptance bar for raters: Submission status shows “Submitted” or “Approved”; confirmation email received within 5 minutes.  
-Expected score: 19/20 (Auto-Approve)
+**Acceptance bar for raters:** Submission status shows "Submitted" or "Approved"; confirmation email received within 5 minutes.
 
----
-
-Summary of examples
-
-1. Healthcare (Accuracy): Adds plain language, defers meds to care team, measurable teach-back.  
-2. K-12 (Safety): Constrains materials, bans substitutions, adds supervision/PPE, measurable understanding.  
-3. Customer Ed (Structure/Validation): Version-specific, concrete acceptance, two accessibility supports.  
-4. Corporate Training (Differentiation): Requires multiple user paths and observable validation.
+**Expected score:** 19/20 (Auto-Approve)
