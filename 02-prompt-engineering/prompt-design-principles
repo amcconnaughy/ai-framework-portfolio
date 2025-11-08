@@ -1,0 +1,168 @@
+# Prompt Design Principles
+
+**Purpose:** Simple, reusable guidance for writing prompts that produce safe, accurate, and useful outputs. All examples are synthetic.
+
+**Alignment:** Prompts designed with these principles produce outputs that score well on the Universal Evaluation — Sample Framework. See `01-evaluation-frameworks/evaluation-framework` for the complete scoring rubric.
+
+---
+
+## 1) Goals and constraints
+
+- **Primary goals:** correctness, safety, usefulness, and time savings for the end user  
+- **Audience:** state who will use the output (role/persona) and adopt an appropriate professional tone  
+- **Data:** do not include private/sensitive information; use synthetic placeholders unless explicit consent and policy allow otherwise  
+- **Policy fit:** align with applicable laws, organizational policies, and reviewer guidelines  
+- **Evaluation fit:** prompts should be easy to score with your evaluation rubric
+
+---
+
+## 2) General rules that prevent most errors
+
+1. **State the role and audience.** Say who the assistant is and who reads the output.  
+2. **Give minimal, concrete context.** Include purpose, constraints, success criteria, timeline/length.  
+3. **Specify an output structure.** Ask for labeled sections or bullets the evaluator can scan.  
+4. **Set guardrails.** Safety, privacy, fairness (avoid stereotypes), and refusal behavior for unsafe/unsupported requests.  
+5. **Ask for brief rationales, not step-by-step reasoning.** One or two sentences explaining key choices.  
+6. **Bound the length.** Provide a word or bullet limit so outputs are skimmable.  
+7. **Optionally request one alternative.** Encourages variety without noise.  
+8. **Self-check.** Require two quick checks before finishing (e.g., “meets success criteria,” “two concrete supports/tips included”).  
+9. **Reference hygiene.** When facts matter, ask for a brief reference type (e.g., “policy,” “standard,” “manual”).  
+10. **Tone and readability.** Match audience expectations; keep language clear and accessible.
+
+**Default length bounds (tune per team):**  
+- Short guidance/notes: 80–120 words  
+- Procedures/mini-plans: ≤ 220 words  
+- Refusals/safety notes: ≤ 80 words
+
+---
+
+## 3) Standard prompt layout
+
+**Role** — who the assistant is (e.g., “process aide,” “communications editor,” “safety reviewer”).  
+**Audience** — who will read/use the output.  
+**Context** — purpose, constraints, success criteria, timing.  
+**Task** — what to produce (artifact + structure).  
+**Guardrails** — safety, privacy, fairness, refusal behavior.  
+**Output structure** — labeled sections/bullets to ensure scannability.  
+**Quality check** — 2 quick confirmations tied to success criteria.  
+**Length** — the bound you want followed.
+
+---
+
+## 4) Reusable output structures
+
+### 4.1 Mini-plan (sections)
+- **Outcome:** one sentence, measurable if applicable  
+- **Prerequisites/Inputs:** 2–5 bullets  
+- **Steps:** concise sequence from simple to complex  
+- **Validation/Acceptance:** 1–3 items to confirm success  
+- **Adjustments/Support:** two concrete tips for different user needs  
+- **Brief rationale:** one sentence on alignment and usefulness
+
+### 4.2 Safety review (sections)
+- **Decision:** safe / unsafe / refuse with alternative  
+- **Issues (if any):** privacy / fairness / appropriateness / risky instruction  
+- **Reason:** one to two sentences in plain language  
+- **Suggested alternative (if refusing):** one sentence  
+- **Escalation note (if relevant):** when and whom to involve
+
+### 4.3 Lightweight quality labels
+- Allowed labels: outcome missing / sequence unclear / validation absent / complete  
+- Optional confidence note: one sentence explaining the choice
+
+---
+
+## 5) Prompt templates (plain text)
+
+### 5.1 Mini-plan generator
+**Role:** process aide  
+**Audience:** practitioners who need a concise plan  
+**Context:** purpose, constraints, success criteria, time available  
+**Task:** create a mini-plan using the “Mini-plan (sections)” structure  
+**Guardrails:** no PII/PHI/PCI, no secrets/tokens, no live customer data; use placeholders; fair and unbiased; professional tone  
+**Quality check:** outcome measurable (if applicable); two concrete adjustments/supports included  
+**Length:** ≤ 220 words
+
+### 5.2 Short communication writer
+**Role:** communications editor  
+**Audience:** stakeholders (non-technical)  
+**Context:** topic, tone, action requested, privacy constraints  
+**Task:** draft a short message using these sections: greeting; purpose; next steps; sign-off  
+**Guardrails:** no PII/PHI/PCI or secrets; placeholders only; neutral and respectful; one simple action  
+**Length:** 80–120 words
+
+### 5.3 Safety refusal with alternatives
+**Role:** safety reviewer  
+**Request:** a user asks for content that appears unsafe or policy-restricted  
+**Task:** refuse and offer a safe alternative using the “Safety review (sections)” structure  
+**Guardrails:** no PII/PHI/PCI or secrets; calm, audience-appropriate; do not provide risky steps  
+**Length:** ≤ 80 words
+
+---
+
+## 6) Pattern library: helpful micro-instructions
+
+- Use varied names and contexts in examples to avoid stereotype patterns.  
+- Provide two concrete supports/tips, not generic advice.  
+- Add a short validation/acceptance check aligned to the stated outcome.  
+- If the request seems adversarial or coded to bypass policy, refuse and propose a safe alternative.  
+- Keep outputs skimmable with clear section headers.  
+- When facts matter, include a brief reference type (“policy,” “standard,” “manual”).
+
+---
+
+## 7) Quick troubleshooting
+
+| Symptom               | Likely cause                | Fix                                                                 |
+|-----------------------|-----------------------------|----------------------------------------------------------------------|
+| Missing validation    | Output structure unclear    | Add a “Validation/Acceptance” section with 1–3 items                 |
+| Weak adjustments      | Vague instruction           | Require “two concrete supports/tips” and give examples               |
+| Overlong output       | No length bound             | Add a word or bullet limit                                          |
+| Hallucinated facts    | No reference cue            | Ask for a brief reference type; narrow the scope                     |
+| Unsafe suggestion     | Missing guardrails          | Add refusal rule and require a safe alternative                      |
+| Off-tone writing      | Audience not specified      | State audience and require a matching tone                           |
+
+---
+
+## 8) Framework alignment guide
+
+When designing prompts to produce high-scoring outputs, map your instructions to evaluation criteria:
+
+| Prompt Element | Framework Criterion             | What to specify                                     |
+|----------------|----------------------------------|------------------------------------------------------|
+| Outcome        | Outcome Clarity                  | Clear success bar or observable result               |
+| Steps          | Sequencing/Process               | Logical progression with prerequisites               |
+| Validation     | Validation/Acceptance            | Concrete checks tied to outcome                      |
+| Supports       | Differentiation & Accessibility  | Two concrete accommodations for different needs      |
+| Guardrails     | Safety & Compliance + Accuracy   | Privacy rules, fairness checks, refusal behavior     |
+
+**Scoring guidance:**  
+- Score six dimensions 0–2 each: Accuracy, Safety & Compliance, Outcome Clarity, Sequencing/Process, Validation/Acceptance, Differentiation & Accessibility  
+- Provide one short note explaining any score of 0 or 1  
+- Do not include step-by-step reasoning in the output  
+
+**Decision labels:** Auto-Approve (Ready) / Human Review (Draft) / Regenerate / Reject
+
+---
+
+## 9) Checklist before you ship
+
+- Role and audience stated  
+- Outcome is clear (and measurable when relevant)  
+- Clear section headers and bullets  
+- Two concrete supports/tips included (if applicable)  
+- Validation/Acceptance included (if applicable)  
+- Safety, privacy, and fairness guardrails present  
+- Length bounded  
+- Brief rationale included (not step-by-step reasoning)
+
+---
+
+## 10) Optional domain adapters (tiny add-ons)
+
+- **K-12:** avoid student data; age-appropriate content; align with school policies; COPPA compliance for under-13  
+- **Corporate L&D:** align with brand/tone; refer to internal policy or SOP names  
+- **Healthcare training:** remove PHI; use approved guidelines; add escalation notes; teach-back verification for patient-facing content  
+- **Customer support:** mirror ticket taxonomy; include “next action” and expected resolution time
+
+---
