@@ -1,1 +1,198 @@
+# Ground Truth — Best Practices & Operating Framework
 
+Purpose: define how to establish, maintain, and govern **ground truth** (authoritative target answers/labels) so model outputs can be evaluated consistently, safely, and at scale.  
+Scope: tooling-agnostic; applies to classification, structured generative outputs with acceptance bars, and refusal scenarios.  
+See `01-evaluation-frameworks/evaluation-framework` for scoring methodology.  
+All examples are synthetic; no real user data.
+
+---
+
+## 1) What Ground Truth Is (and Isn’t)
+
+- **Definition:** The authoritative expected answer/label for a given item—the target used to score systems and calibrate raters.
+- **Includes:** a concise **reference answer** (for generative tasks), per-dimension **labels** when rubric-scored, and **acceptance criteria**.
+- **Excludes:** coaching notes, model prompts, failure specimens, exploratory drafts (those belong in calibration materials or test sets).
+
+---
+
+## 2) Principles
+
+- **Accuracy first:** factually correct, policy-aligned, version-specific where relevant.  
+- **Safety by design:** no PII/PHI/PCI or secrets; use placeholders.  
+- **Evaluable:** each item has observable **Validation/Acceptance** criteria (e.g., “**0 errors**,” “**teach-back documented**”).  
+- **Deterministic:** avoid ambiguity; where unavoidable, add **tie-break rules**.  
+- **Minimal & sufficient:** only what’s needed to judge correctness.
+
+---
+
+## 3) Source of Truth & Provenance
+
+- Derive from official standards, SOPs, manuals, or approved SME decisions.  
+- Tag each item with **provenance** (source/policy section) and **“Synthetic example; no real user data.”**  
+- **Version pin** to product/policy version (e.g., “v3.2”) and define the update trigger when upstream changes.
+
+---
+
+## 4) Ground Truth Card Structure (non-technical)
+
+- **ID** (stable)  
+- **Prompt (abridged)** — how a user would ask  
+- **Reference answer (use as-is)** — concise, skimmable  
+- **Validation/Acceptance** — observable success bar  
+- **Labels (rubric-scored)** — Accuracy; Safety & Compliance; Outcome Clarity; Sequencing/Process; Validation/Acceptance; Differentiation & Accessibility  
+- **Acceptable variations** — narrowly defined, safe alternatives  
+- **Provenance & Version** — source/policy + version  
+- **Content Steward** — accountable for updates  
+- **Brief rationale (optional):** one sentence explaining structural choices (e.g., version pinning, privacy safeguard). Not scoring guidance.
+
+---
+
+## 5) Sampling & Coverage
+
+- **Stratified coverage:** include common, edge, and high-risk scenarios in realistic proportions.  
+- **Difficulty tiers:** straightforward, borderline, and complex items (avoid overfitting to “easy”).  
+- **Refusal-required cases:** include items where the **correct** output is a **refusal with safe alternative**.
+
+---
+
+## 6) Rater Operations
+
+- **Rater pack:** evaluation rubric + this page; nothing else required.  
+- **Anchors live in calibration, not in GT cards:** use separate calibration snippets to show what a **2** vs **1** looks like per dimension.  
+- **Inter-rater agreement (IRR) targets:** Cohen’s kappa **≥ 0.70** for decision bands; **≥ 0.60** per dimension before deployment.  
+- **Dispute path:** if disagreement persists after rubric application, the **Content Steward** makes the final call and updates the item; decision is logged.
+
+---
+
+## 7) Acceptance Criteria (make it observable)
+
+Prefer **countable/documented** checks; avoid vague adjectives.
+
+- Examples:  
+  - “Import summary shows **0 errors**; created/merged counts **match preview**.”  
+  - “**Teach-back documented** or escalation ticket logged.”  
+  - “Output contains **exactly** the requested sections with required labels.”
+
+---
+
+## 8) Equivalence & Canonicalization (keep scoring consistent)
+
+- Treat **case, whitespace, and basic punctuation** as irrelevant.  
+- Accept **common synonyms** if meaning is unchanged.  
+- **Normalize** markup/whitespace and **standardize units/dates** before scoring.  
+- Numbers may differ by normal **rounding** if **units are correct**.
+
+---
+
+## 9) Ambiguity, N/A, and Refusals
+
+- **Tie-break rules:** specify precedence when multiple reasonable answers exist (e.g., prefer the policy-aligned, minimal-risk answer).  
+- **N/A policy:** **Blockers (Accuracy, Safety & Compliance) are never N/A.** In correct refusals, non-blockers may be N/A; rescale per the evaluation framework.  
+- **Refusal ground truth (checklist):** a correct refusal (1) states the safety/policy reason, (2) offers a safe alternative, and (3) includes escalation if relevant.
+
+---
+
+## 10) Bias, Fairness & Accessibility
+
+- **Representation:** vary names/contexts across items to avoid stereotype patterns.  
+- **Parity:** keep difficulty and tone comparable across roles/personas.  
+- **Accessibility:** if supports are part of correctness, include them in the reference answer (e.g., screen-reader note).
+
+---
+
+## 11) Governance & Quality Gates
+
+- **Two-person rule:** Author → Reviewer → Approver before publish.  
+- **Release gates:** no item ships without provenance, acceptance criteria, and version pin.  
+- **Change control:** semantic versioning; deprecate rather than silently edit.  
+- **Audit trail:** succinct changelog (what changed, why, source).  
+- **Drift trigger:** if decision-band agreement drops below **0.70** in two consecutive samples, review and update the affected items.  
+- **Leakage control:** keep ground-truth items out of model training data and out of rater views during blind testing.
+
+---
+
+## 12) Task-Type Notes (lightweight)
+
+- **Classification:** use the frozen label set. If multiple labels seem valid, select the **most specific** single label; do **not** multi-label unless explicitly allowed.  
+- **Extraction/structured:** all required fields must be present; use `N/A` only when truly not applicable and note why.  
+- **Free-text generation:** when the prompt requires sections or length bounds, these are part of correctness.
+
+---
+
+## 13) Separation of Concerns
+
+- **Ground Truth (this):** authoritative target answers/labels. GT cards **exclude scoring/coaching rationales** (no walkthroughs or how-to-score notes). A **brief context rationale** (one sentence on *why* the answer is structured as-is) is acceptable.  
+- **Calibration (separate):** walkthroughs/anchors explaining **why** a 2 vs 1.  
+- **Test Cases (separate):** prompts + candidate outputs scored **cold** (no rationales).  
+- **Prompt Design (separate):** how to elicit better outputs; not part of ground truth.
+
+---
+
+## 14) Pre-Publish Checklist (per item)
+
+- Reference answer is concise, policy-aligned, and version-pinned  
+- **Validation/Acceptance** is observable/measurable  
+- Labels use **canonical rubric names** (Outcome Clarity; Sequencing/Process; Validation/Acceptance; etc.)  
+- Provenance declared; placeholders only (no PII/PHI/PCI)  
+- Reviewed/approved per governance (Author → Reviewer → Approver)
+
+---
+
+## Example Ground Truth Card (Synthetic)
+
+### Ground Truth Card: CSV Import Feature Documentation
+
+**ID:** ce-csv-import-v32
+
+**Prompt (abridged):**  
+“Create a step-by-step guide for bulk importing contacts into AcmeCRM version 3.2 using CSV. Include how to verify success and support options for different users.”
+
+**Reference answer (use as-is):**
+
+**Outcome:** Successfully import contacts from CSV with **0 errors** and created/merged counts that **match the preview**.
+
+**Prerequisites:**
+- AcmeCRM v3.2 access with import permissions  
+- CSV template downloaded from Settings → Import → Templates  
+- Sample data prepared (**placeholders only**; no real customer data)
+
+**Steps:**
+1. Download the v3.2 CSV template and keep all header names unchanged.  
+2. Add your data to placeholder rows only; **do not add or rename columns**.  
+3. Save as UTF-8 CSV with comma delimiters.  
+4. Navigate to Contacts → Import → CSV (v3.2).  
+5. Upload your file and enable duplicate matching on email and phone (email only if phone unavailable).  
+6. Review the preview and confirm created and merged counts.  
+7. Click Run Import.
+
+**Validation/Acceptance:**
+- Import summary displays **“0 errors.”**  
+- Created/merged counts **match the preview** numbers.  
+- Spot-check 3–5 records to confirm field mapping is correct.
+
+**Support Options (Differentiation & Accessibility):**
+- Screen-reader users: headers are preserved in reading order; column sequence matches template.  
+- Low-bandwidth users: split large files into smaller batches (per system limits) if upload times out.
+
+**Brief rationale (optional):** Version pinning and preview-before-commit reduce version drift and mapping errors; acceptance checks confirm success without exposing real customer data.
+
+**Labels (rubric-scored):**
+- Accuracy: 2 (version-specific, procedurally correct)  
+- Safety & Compliance: 2 (placeholders only; no PII)  
+- Outcome Clarity: 2 (measurable success condition)  
+- Sequencing/Process: 2 (logical progression; preview before commit)  
+- Validation/Acceptance: 2 (concrete, observable checks)  
+- Differentiation & Accessibility: 2 (two specific accommodations)
+
+**Acceptable variations:**
+- Matching on email only when phone is unavailable  
+- Batch size adjusted per organizational or system limits  
+- Alternative phrasing for “spot-check” (e.g., “verify,” “sample”)
+
+**Provenance:**
+- Source: AcmeCRM Product Documentation v3.2, Section 4.1 “Bulk Import” (synthetic)  
+- Policy: Customer Data Handling SOP v2.0 (synthetic)  
+- Version: v3.2 (update trigger: any v3.3+ release)  
+- Synthetic example; no real user data
+
+**Content Steward:** Customer Education Team
